@@ -1,0 +1,23 @@
+{
+  "name": "ideashare-backend",
+  "module": "index.ts",
+  "type": "module",
+  "scripts": {
+    "dev": "wrangler dev src/index.ts --port 3000 --ip 0.0.0.0"
+  },
+  "devDependencies": {
+    "@types/bun": "latest",
+    "prisma": "^5.8.1",
+    "typescript": "^5.3.3",
+    "wrangler": "^3.29.0"
+  },
+  "peerDependencies": {
+    "typescript": "^5.0.0"
+  },
+  "dependencies": {
+    "@prisma/client": "^5.8.1",
+    "dayjs": "^1.11.10",
+    "hono": "latest",
+    "jose": "^5.2.2"
+  }
+}

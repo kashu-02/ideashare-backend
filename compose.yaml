@@ -1,0 +1,38 @@
+services:
+  app:
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    working_dir: /app
+    volumes:
+      - type: bind
+        source: ./
+        target: /app
+    user: 1000:1000
+    ports:
+      - 3000:3000
+      - 5555:5555
+    tty: true
+    stdin_open: true
+    command: /bin/bash
+    env_file:
+      - .env
+    environment:
+      NODE_ENV: development
+
+  db:
+    image: postgres:latest
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: postgres
+    # ports:
+    #   - 5432:5432
+    volumes:
+      - type: volume
+        source: postgres
+        target: /var/lib/postgresql/data
+
+volumes:
+  postgres:
+

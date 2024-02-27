@@ -1,0 +1,215 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id             String          @id @unique
+  email          String          @unique
+  nickname       String?
+  name           String?
+  sex            Int             @default(0)
+  birthday       String?
+  address        String?
+  avatar         String?
+  ticket         Int             @default(0)
+  point          Int             @default(0)
+  createdAt      DateTime        @default(now())
+  updatedAt      DateTime        @updatedAt
+  deletedAt      DateTime?
+  ProblemAnswers ProblemAnswer[]
+  CatalogProductRatings CatalogProductRating[]
+  CatalogProductReviews CatalogProductReview[]
+  Carts          Cart[]
+  Orders         Order[]
+  UserNotifications UserNotification[]
+}
+
+model Company {
+  id              String           @id @default(uuid())
+  name            String
+  createdAt       DateTime         @default(now())
+  updatedAt       DateTime         @updatedAt
+  deletedAt       DateTime?
+  Problems        Problem[]
+  CatalogProducts CatalogProduct[]
+}
+
+model Problem {
+  id         String            @id @default(uuid())
+  companyId  String
+  Company    Company           @relation(fields: [companyId], references: [id])
+  rewards    Int               @default(0)
+  shortTitle String
+  title      String
+  imageUrl   String
+  content    String
+  questions  ProblemQuestion[]
+  answers    ProblemAnswer[]
+  deadline   DateTime
+  createdAt  DateTime          @default(now())
+  updatedAt  DateTime          @updatedAt
+  deletedAt  DateTime?
+}
+
+model ProblemQuestion {
+  id        String          @id @default(uuid())
+  problemId String
+  Problem   Problem         @relation(fields: [problemId], references: [id])
+  question  String
+  required  Boolean
+  Answers   ProblemAnswer[]
+  createdAt DateTime        @default(now())
+  updatedAt DateTime        @updatedAt
+  deletedAt DateTime?
+}
+
+model ProblemAnswer {
+  id         String          @id @default(uuid())
+  problemId  String
+  Problem    Problem         @relation(fields: [problemId], references: [id])
+  userId     String
+  User       User            @relation(fields: [userId], references: [id])
+  questionId String
+  Question   ProblemQuestion @relation(fields: [questionId], references: [id])
+  answer     String
+  createdAt  DateTime        @default(now())
+  updatedAt  DateTime        @updatedAt
+  deletedAt  DateTime?
+}
+
+model Catalog {
+  id              String           @id @default(uuid())
+  name            String
+  price           Int
+  createdAt       DateTime         @default(now())
+  updatedAt       DateTime         @updatedAt
+  deletedAt       DateTime?
+  CatalogProducts CatalogProduct[]
+}
+
+model CatalogProduct {
+  id          String    @id @default(uuid())
+  catalogId   String
+  Catalog     Catalog   @relation(fields: [catalogId], references: [id])
+  companyId   String
+  Company     Company   @relation(fields: [companyId], references: [id])
+  name        String
+  description String?
+  rating      Float     @default(0)
+  price       Int
+  images      CatalogProductImage[]
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  deletedAt   DateTime?
+  Ratings     CatalogProductRating[]
+  Reviews     CatalogProductReview[]
+  CartItems   CartItem[]
+  OrderItems  OrderItem[]
+}
+
+model CatalogProductImage {
+  id              String           @id @default(uuid())
+  catalogProductId String
+  CatalogProduct   CatalogProduct   @relation(fields: [catalogProductId], references: [id])
+  imageUrl           String
+  createdAt       DateTime         @default(now())
+  updatedAt       DateTime         @updatedAt
+  deletedAt       DateTime?
+}
+
+model CatalogProductRating {
+  id              String           @id @default(uuid())
+  catalogProductId String
+  CatalogProduct   CatalogProduct   @relation(fields: [catalogProductId], references: [id])
+  userId          String
+  User            User             @relation(fields: [userId], references: [id])
+  rating          Int
+  createdAt       DateTime         @default(now())
+  updatedAt       DateTime         @updatedAt
+  deletedAt       DateTime?
+}
+
+model CatalogProductReview {
+  id              String           @id @default(uuid())
+  catalogProductId String
+  CatalogProduct   CatalogProduct   @relation(fields: [catalogProductId], references: [id])
+  userId          String
+  User            User             @relation(fields: [userId], references: [id])
+  content         String
+  createdAt       DateTime         @default(now())
+  updatedAt       DateTime         @updatedAt
+  deletedAt       DateTime?
+}
+
+model Cart {
+  userId      String    @id @unique
+  User        User      @relation(fields: [userId], references: [id])
+  total       Int
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  CartItems   CartItem[]
+}
+
+model CartItem {
+  id          String    @id @default(uuid())
+  userId      String
+  Cart        Cart      @relation(fields: [userId], references: [userId])
+  catalogProductId String
+  CatalogProduct   CatalogProduct   @relation(fields: [catalogProductId], references: [id])
+  price       Int
+  quantity    Int
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+}
+
+model Order {
+  id          String    @id @default(uuid())
+  userId      String
+  User        User      @relation(fields: [userId], references: [id])
+  total       Int
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  deletedAt   DateTime?
+  OrderItems  OrderItem[]
+}
+
+model OrderItem {
+  id          String    @id @default(uuid())
+  orderId     String
+  Order       Order     @relation(fields: [orderId], references: [id])
+  catalogProductId String
+  CatalogProduct   CatalogProduct   @relation(fields: [catalogProductId], references: [id])
+  price       Int
+  quantity    Int
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  deletedAt   DateTime?
+}
+
+model UserNotification {
+  id          String    @id @default(uuid())
+  userId      String
+  User        User      @relation(fields: [userId], references: [id])
+  title       String
+  content     String
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  deletedAt   DateTime?
+}
+
+model News {
+  id          String    @id @default(uuid())
+  title       String
+  content     String
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  deletedAt   DateTime?
+}
