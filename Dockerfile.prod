@@ -16,6 +16,9 @@ RUN ~/.bun/bin/bunx prisma generate --schema=./prisma/schema.prisma
 RUN ~/.bun/bin/bunx prisma migrate deploy --schema=./prisma/schema.prisma
 
 FROM oven/bun
+RUN apt-get update && \
+    apt-get upgrade -y && \
+    apt-get install -y openssl
 COPY --from=base /app /app
 WORKDIR /app
 ENTRYPOINT ["bun",  "./src/index.ts"]
