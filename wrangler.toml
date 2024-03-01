@@ -1,0 +1,12 @@
+compatibility_date = "2024-03-01"
+main = "./src/index.ts"
+node_compat = true
+
+[env.dev]
+name = "ideashare-backend-dev"
+
+[env.staging]
+name = "ideashare-backend-staging"
+
+[env.production]
+name = "ideashare-backend-production"

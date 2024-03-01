@@ -14,6 +14,7 @@ export const jwtVerifyMiddleware = () : MiddlewareHandler =>{
         }),
       })
     }
+    // @ts-ignore-next-line
     const JWKS = jose.createRemoteJWKSet(new URL('https://ideashare.jp.auth0.com/.well-known/jwks.json'))
 
     let msg

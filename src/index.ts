@@ -10,7 +10,9 @@ import checkout from './routes/checkout';
 import { jwtVerifyMiddleware } from './routes/middleware/jwtVerifyMiddleware';
 
 const app = new Hono();
-
+app.get('/', (c) => {
+  return c.json({ message: 'Success' });
+});
 app.get('/products/:productId', getOneProduct) 
 app.route('/problems', problems)
 app.route('/companies', companies)
@@ -22,7 +24,4 @@ app.route('/cart', cart)
 app.route('/checkout', checkout)
 
 
-export default {
-  port: process.env.PORT || 3000,
-  fetch: app.fetch,
-} 
+export default app;

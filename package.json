@@ -18,6 +18,7 @@
   },
   "dependencies": {
     "@prisma/client": "latest",
+    "@prisma/extension-accelerate": "^1.0.0",
     "dayjs": "^1.11.10",
     "hono": "latest",
     "jose": "^5.2.2"

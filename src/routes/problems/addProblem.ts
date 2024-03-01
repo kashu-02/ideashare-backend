@@ -9,6 +9,7 @@ type ProblemBody = {
   title: string;
   imageUrl: string;
   content: string;
+  shortTitle: string;
   rewards: number;
   questions: {
     question: string;
@@ -30,6 +31,7 @@ export default async (c: Context) => {
   const problem: Prisma.ProblemCreateInput = {
     title: body.title,
     imageUrl: body.imageUrl,
+    shortTitle: body.shortTitle,
     content: body.content,
     deadline: dayjs(body.deadline).toDate(),
     rewards: Number(body.rewards),
