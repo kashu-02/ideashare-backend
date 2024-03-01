@@ -8,6 +8,7 @@ generator client {
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
+  directUrl= env("DIRECT_URL")
 }
 
 model User {
@@ -27,7 +28,7 @@ model User {
   ProblemAnswers ProblemAnswer[]
   CatalogProductRatings CatalogProductRating[]
   CatalogProductReviews CatalogProductReview[]
-  Carts          Cart[]
+  CartItems      CartItem[]
   Orders         Order[]
   UserNotifications UserNotification[]
 }
@@ -149,32 +150,24 @@ model CatalogProductReview {
   deletedAt       DateTime?
 }
 
-model Cart {
-  userId      String    @id @unique
-  User        User      @relation(fields: [userId], references: [id])
-  total       Int
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt
-  CartItems   CartItem[]
-}
-
 model CartItem {
   id          String    @id @default(uuid())
   userId      String
-  Cart        Cart      @relation(fields: [userId], references: [userId])
   catalogProductId String
   CatalogProduct   CatalogProduct   @relation(fields: [catalogProductId], references: [id])
   price       Int
   quantity    Int
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
+  User        User      @relation(fields: [userId], references: [id])
 }
 
 model Order {
   id          String    @id @default(uuid())
   userId      String
   User        User      @relation(fields: [userId], references: [id])
-  total       Int
+  name        String
+  address     String
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
   deletedAt   DateTime?

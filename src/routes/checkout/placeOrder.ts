@@ -1,9 +1,10 @@
 import dayjs from 'dayjs';
 
-import db from '../../../infra/prisma';
+import db from '../../infra/prisma';
 
 import type { Context } from 'hono';
 import type { Prisma } from '@prisma/client';
+import prisma from '../../infra/prisma';
 
 type OrderItem = {
   catalogProductId: string;
@@ -11,7 +12,8 @@ type OrderItem = {
 }
 
 type OrderBody = {
-  userId: string;
+  name: string;
+  address: string;
   items: OrderItem[];
 }
 
@@ -21,6 +23,7 @@ type FailedItems = {
 }[]
 
 export default async (c: Context) => {
+  const userId = c.get('userId');
   const body: OrderBody = await c.req.json();
 
   let failedItems: FailedItems = []
@@ -47,8 +50,6 @@ export default async (c: Context) => {
     })
     if (failedItems.length > 0) return {}
 
-    const totalPrice = orderItems.reduce((acc, cur) => acc += cur!.price, 0)
-
     const orderItemsForPrisma: Prisma.OrderItemCreateWithoutOrderInput[] = orderItems.map((item,index) => {
       return {
         price: item!.price,
@@ -65,15 +66,24 @@ export default async (c: Context) => {
       data: {
         User: {
           connect: {
-            id: body.userId
+            id: userId
           }
         },
-        total: totalPrice,
+        name: body.name,
+        address: body.address,
         OrderItems: {
           create: orderItemsForPrisma
         }
       }
     })
+
+    if (failedItems.length === 0) { 
+      await tx.cartItem.deleteMany({
+        where: {
+          userId
+        }
+      })
+    }
     return order
   })
   

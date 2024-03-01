@@ -1,0 +1,11 @@
+FROM oven/bun:latest
+
+ENV APP_HOME /app
+
+WORKDIR $APP_HOME
+
+COPY . ./
+
+RUN bun install --production --frozen-lockfile
+
+ENTRYPOINT ["bun",  "./src/index.ts"]

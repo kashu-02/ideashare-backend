@@ -6,7 +6,8 @@ import type { Context } from 'hono';
 
 export default async (c: Context) => {
   const userId = c.get('userId');
-  const user = await db.problem.findUnique({
+  console.log('userId', userId)
+  const user = await db.user.findUnique({
     where: {
       id: userId
     }
@@ -14,6 +15,6 @@ export default async (c: Context) => {
   if (!user) {
     return c.notFound()
   }
-
+  console.log('user', user)
   return c.json(user)
 }

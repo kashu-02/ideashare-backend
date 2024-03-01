@@ -35,6 +35,7 @@ export const jwtVerifyMiddleware = () : MiddlewareHandler =>{
       })
     }
     ctx.set('userId', payload.sub)
+    console.log('userId', payload.sub)
     await next()
   }
 }
