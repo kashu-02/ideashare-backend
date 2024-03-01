@@ -5,7 +5,8 @@
   "scripts": {
     "start": "bun src/index.ts",
     "dev": "bun --watch src/index.ts",
-    "dev-cf": "wrangler dev src/index.ts --port 3000 --ip 0.0.0.0"
+    "dev-cf": "wrangler dev src/index.ts --port 3000 --ip 0.0.0.0",
+    "postinstall": "prisma generate"
   },
   "devDependencies": {
     "@types/bun": "latest",
