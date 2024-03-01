@@ -22,4 +22,7 @@ app.route('/cart', cart)
 app.route('/checkout', checkout)
 
 
-export default app;
+export default {
+  port: process.env.PORT || 3000,
+  fetch: app.fetch,
+} 
