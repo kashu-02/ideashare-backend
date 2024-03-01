@@ -11,7 +11,6 @@ WORKDIR /app
 
 COPY . .
 
-RUN echo $HOME
 RUN ~/.bun/bin/bun install --production --frozen-lockfile
 RUN ~/.bun/bin/bunx prisma generate --schema=./prisma/schema.prisma
 RUN ~/.bun/bin/bunx prisma migrate deploy --schema=./prisma/schema.prisma
