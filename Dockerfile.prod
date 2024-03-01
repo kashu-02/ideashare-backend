@@ -8,4 +8,7 @@ COPY . ./
 
 RUN bun install --production --frozen-lockfile
 
+RUN bunx prisma generate
+RUN bunx prisma migrate deploy
+
 ENTRYPOINT ["bun",  "./src/index.ts"]
