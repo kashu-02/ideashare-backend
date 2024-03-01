@@ -1,14 +1,33 @@
-FROM oven/bun:latest
+FROM node:lts as build
 
-ENV APP_HOME /app
+ARG _DATABASE_URL
+ARG _DIRECT_URL
+ENV DIRECT_URL $_DIRECT_URL
+ENV DATABASE_URL $_DATABASE_URL
 
-WORKDIR $APP_HOME
+RUN apt-get update && apt-get upgrade -y
 
-COPY . ./
+WORKDIR /prisma
+COPY package.json ./
+COPY package-lock.json ./
+COPY prisma ./prisma
 
-RUN bun install --production --frozen-lockfile
+RUN npm install
+RUN npx prisma generate --schema=./prisma/schema.prisma
+RUN npx prisma migrate deploy --schema=./prisma/schema.prisma
 
-RUN bunx prisma generate
-RUN bunx prisma migrate deploy
+
+
+FROM oven/bun as production
+
+WORKDIR /app
+
+COPY . .
+
+COPY --from=build /prisma .
+
+RUN rm -rf node_modules && bun install --production --frozen-lockfile
+
+RUN ls -la
 
 ENTRYPOINT ["bun",  "./src/index.ts"]
