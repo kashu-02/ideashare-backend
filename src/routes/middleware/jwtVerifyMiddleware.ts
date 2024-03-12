@@ -14,8 +14,9 @@ export const jwtVerifyMiddleware = () : MiddlewareHandler =>{
         }),
       })
     }
+    console.log('jwt', jwt)
     // @ts-ignore-next-line
-    const JWKS = jose.createRemoteJWKSet(new URL('https://ideashare.jp.auth0.com/.well-known/jwks.json'))
+    const JWKS = jose.createRemoteJWKSet(new URL(process.env.JWKS_URL))
 
     let msg
     let payload
@@ -47,6 +48,7 @@ function unauthorizedResponse(opts: {
   errDescription: string
   statusText?: string
 }) {
+  console.log('unauthorizedResponse', opts.statusText)
   return new Response('Unauthorized', {
     status: 401,
     statusText: opts.statusText,

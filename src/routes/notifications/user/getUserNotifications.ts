@@ -6,7 +6,7 @@ import type { Context } from 'hono';
 import type { Prisma } from '@prisma/client';
 
 export default async (c: Context) => {
-  const userId = c.req.param('userId')
+  const userId = c.get('userId');
   const includeDeleted = c.req.query('includeDeleted') === 'true';
 
   let dbFindOptions: Prisma.UserNotificationFindManyArgs = {}
@@ -22,6 +22,6 @@ export default async (c: Context) => {
   
   }
   const notifications = await db.userNotification.findMany(dbFindOptions);
-
+  console.log(notifications)
   return c.json(notifications)
 }

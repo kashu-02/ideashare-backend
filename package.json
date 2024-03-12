@@ -4,14 +4,12 @@
   "type": "module",
   "scripts": {
     "start": "bun src/index.ts",
-    "dev": "bun --watch src/index.ts",
-    "dev-cf": "wrangler dev src/index.ts --port 3000 --ip 0.0.0.0"
+    "dev": "bun --watch src/index.ts"
   },
   "devDependencies": {
     "@types/bun": "latest",
     "prisma": "^5.8.1",
-    "typescript": "^5.3.3",
-    "wrangler": "^3.29.0"
+    "typescript": "^5.3.3"
   },
   "peerDependencies": {
     "typescript": "^5.0.0"

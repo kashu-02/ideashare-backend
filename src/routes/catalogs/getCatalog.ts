@@ -3,20 +3,15 @@ import dayjs from 'dayjs';
 import db from '../../infra/prisma';
 
 import type { Context } from 'hono';
-import type { Prisma } from '@prisma/client';
 
 export default async (c: Context) => {
-  const includeDeleted = c.req.query('includeDeleted') === 'true';
+  const catalogId = c.req.param('catalogId');
 
-  let dbFindOptions: Prisma.CatalogFindManyArgs = {}
-
-  if (!includeDeleted) {
-    dbFindOptions.where = {
-      deletedAt: null
+  const catalog = await db.catalog.findUnique({
+    where: {
+      id: catalogId
     }
-  }
-    
-  const catalogs = await db.catalog.findMany(dbFindOptions);
+      });
 
-  return c.json(catalogs)
+  return c.json(catalog)
 }

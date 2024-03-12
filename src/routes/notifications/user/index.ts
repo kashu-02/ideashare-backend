@@ -7,7 +7,7 @@ import getOneUserNotification from "./getOneUserNotification";
 const userNotification = new Hono();
 
 userNotification.post('/', addUserNotification )
-userNotification.get('/:userId', getUserNotifications)
-userNotification.get('/:userId/:notificationId', getOneUserNotification)
+userNotification.get('/', getUserNotifications)
+userNotification.get('/:notificationId', getOneUserNotification)
 
 export default userNotification;

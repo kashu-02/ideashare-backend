@@ -7,6 +7,7 @@ import type { Context } from 'hono';
 type CatalogBody = {
   name: string;
   price: number;
+  imageUrl: string;
 }
 
 export default async (c: Context) => {
@@ -15,7 +16,8 @@ export default async (c: Context) => {
   const catalog = await db.catalog.create({
     data: {
       name: body.name,
-      price: body.price
+      price: body.price,
+      imageUrl: body.imageUrl,
     }
   })
   
