@@ -37,6 +37,7 @@ model User {
 model Company {
   id              String           @id @default(uuid())
   name            String
+  imageUrl        String           @default("https://via.placeholder.com/150")
   createdAt       DateTime         @default(now())
   updatedAt       DateTime         @updatedAt
   deletedAt       DateTime?
